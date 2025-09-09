@@ -2,7 +2,7 @@ import * as React from 'react';
 import { CssVarsProvider, extendTheme, useColorScheme } from '@mui/joy/styles';
 import GlobalStyles from '@mui/joy/GlobalStyles';
 import CssBaseline from '@mui/joy/CssBaseline';
-import { useState , useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Box from '@mui/joy/Box';
 import Button from '@mui/joy/Button';
 import Checkbox from '@mui/joy/Checkbox';
@@ -12,6 +12,7 @@ import FormLabel from '@mui/joy/FormLabel';
 import IconButton, { IconButtonProps } from '@mui/joy/IconButton';
 import Link from '@mui/joy/Link';
 import Input from '@mui/joy/Input';
+import Tooltip from '@mui/joy/Tooltip';
 import Typography from '@mui/joy/Typography';
 import Stack from '@mui/joy/Stack';
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
@@ -21,6 +22,12 @@ import NewReleasesRoundedIcon from '@mui/icons-material/NewReleasesRounded';
 import GoogleIcon from './GoogleIcon.js';
 import RufousHummer from "./RufousHummer.jpg"
 import back1 from "./back1.jpg";
+import back2 from "./back2.jpg";
+import nioclogo from './nioclogo.png'
+import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
+
+
 // var FormElements = HTMLFormControlsCollection {
 //   email: HTMLFormControlsCollection,
 //   password: HTMLInputElement,
@@ -31,10 +38,7 @@ import back1 from "./back1.jpg";
 // }
 
 
- 
-
-function Changelingk()
-{
+function Changelingk() {
     window.location.href = 'http://nioc.ir';
 }
 
@@ -44,6 +48,7 @@ function ColorSchemeToggle(props) {
     const [mounted, setMounted] = React.useState(false);
 
     React.useEffect(() => setMounted(true), []);
+
 
     return (
         <IconButton
@@ -66,11 +71,83 @@ const customTheme = extendTheme({ defaultColorScheme: 'dark' });
 
 export default function SignInSide() {
 
-const [username ,SetUserName]=useState('')
-const [password , Setpassword] = useState('')
+    const [username, SetUserName] = useState(' ')
+    const [password, Setpassword] = useState('')
 
-return (
-        <CssVarsProvider theme={customTheme} disableTransitionOnChange>
+
+    // useEffect(() => {
+
+    //     handleFData();
+
+    // }, [username])
+
+
+
+    // const handleFetchData = () => { // access in API call
+    //     fetch(`https://awesome.api.io?api-key=${process.env.REACT_APP_SECRET_NAME}`)
+    //         .then((res) => res.json())
+    //         .then((data) => console.log(data))
+    // }
+
+    const checkGate = () => {
+
+        var API_ADDRESS = "http://127.0.0.1:8000/"
+
+        var APINAME = "osdu/api/getwelltype"
+
+        // access in API call
+
+        console.log("apiname", API_ADDRESS)
+        console.log("address", APINAME)
+        // fetch(`https://awesome.api.io?api-key=${process.env.REACT_APP_SECRET_NAME}`)
+        //     .then((res) => res.json())
+        //     .then((data) => console.log(data))
+
+        // fetch(API_ADDRESS + APINAME)
+        //     .then((res) => res+++++3.json())
+        //     .then((data) => console.log(data))
+
+        console.log("password", password)
+        console.log("username", username)
+        console.log("inside chekgate")
+        var APINAME1 = "osdu/api/checkgate";
+        // fetch(API_ADDRESS + APINAME1, {
+        //     method: "POST",
+        //     body: JSON.stringify({ username: { username }, password: { password } })
+        // })
+        //     .then((res) => res.json())
+        //     .then((data) => console.log(data))
+        // .catch(error => console.error('Error fetching:', error));
+        axios.post(API_ADDRESS + APINAME1, {
+            username: String(username),
+            password: Number(password),
+        })
+            .then(function (response) {
+                // console.log(response);
+                // alert(response.status)
+                if (response.status === 200) {
+                    toast.success('اطلاعات یافت شد')
+                } else {
+
+                    toast.error("اطلاعات اشتباه است")
+                }
+            })
+            .catch(function (error) {
+
+                console.log(error);
+                toast.error("  ارتباط با سرور قطع شده است")
+            })
+
+
+
+    }
+
+
+    return (
+
+
+
+        <CssVarsProvider theme={customTheme} >
             <CssBaseline />
             <GlobalStyles
                 styles={{
@@ -79,6 +156,8 @@ return (
                         '--Transition-duration': '0.4s', // set to `none` to disable transition
                     },
                 }}
+            />
+            <Toaster position="top-left" reverseOrder={true}
             />
             <Box
                 sx={(theme) => ({
@@ -117,6 +196,12 @@ return (
                         </Box>
                         <ColorSchemeToggle />
                     </Box>
+                    <Box>
+                        <center>
+                            <img src={nioclogo}></img>
+
+                        </center>
+                    </Box>
                     <Box
                         component="main"
                         sx={{
@@ -140,31 +225,51 @@ return (
                             },
                         }}
                     >
-                        <Stack sx={{ gap: 4, mb: 2 }}>
-                            <Stack sx={{ gap: 1 }}>
-                                <Typography component="h1" level="h3">
-                                    سامانه اطلاعات یکپارچه نفت
-                                </Typography>
-                                <Typography level="body-sm">
-                                  مرکز مانیتورینگ شرکت نفت -  
-                                    <Link href="#replace-with-a-link" level="title-sm">
-                                      OSDU Platfrom  
-                                    </Link>
-                                </Typography>
+                        <center>
+                            <Stack sx={{ gap: 4, mb: 2 }}>
+                                <Stack sx={{ gap: 1 }}>
+                                    <Typography component="h1" level="h3">
+                                        سامانه اطلاعات یکپارچه نفت
+                                    </Typography>
+                                    <Typography level="body-sm">
+                                        مرکز مانیتورینگ شرکت نفت -
+                                        <Link href="#replace-with-a-link" level="title-sm">
+                                            OSDU Platfrom
+                                        </Link>
+                                    </Typography>
+                                </Stack>
+
                             </Stack>
-                            
-                        </Stack>
+                        </center>
                         <Stack sx={{ gap: 4, mt: 2 }}>
                             <form
 
                             >
                                 <FormControl required>
+
                                     <FormLabel>نام کاربری</FormLabel>
-                                    <Input  type="text" name="username" placeholder='نام'/>
+                                    <Tooltip arrow
+                                        color="primary"
+                                        placement="top-end"
+                                        size="md"
+                                        variant="plain" describeChild title="نام کاربری خود را وارد کنید">
+
+                                        <Input type="text" onChange={e => SetUserName(e.target.value)} name="username" placeholder='نام' />
+                                    </Tooltip>
+
                                 </FormControl>
                                 <FormControl required>
                                     <FormLabel>رمز عبور</FormLabel>
-                                    <Input type="password" name="password" placeholder='رمز' />
+
+                                    <Tooltip arrow
+                                        color="primary"
+                                        placement="top-end"
+                                        size="md"
+                                        variant="soft" describeChild title="رمز عبور خود را وارد کنید">
+
+                                        <Input type="password" onChange={e => Setpassword(e.target.value)} name="password" placeholder='رمز' />
+                                    </Tooltip>
+
                                 </FormControl>
                                 <Stack sx={{ gap: 4, mt: 2 }}>
                                     <Box
@@ -175,11 +280,12 @@ return (
                                         }}
                                     >
                                         <Checkbox size="sm" label="من را به خاطر بسپار" name="persistent" />
+
                                         <Link level="title-sm" href="#replace-with-a-link">
                                             رمز ورود را فرلموش کرده اید ؟
                                         </Link>
                                     </Box>
-                                    <Button type="submit" fullWidth>
+                                    <Button type="submit" onClick={checkGate} fullWidth>
                                         ورود
                                     </Button>
                                 </Stack>
@@ -196,7 +302,7 @@ return (
                         </Divider>
                         <Stack sx={{ gap: 4, mb: 2 }}>
                             <Stack sx={{ gap: 1 }}>
-                             
+
                             </Stack>
                             <Button
                                 variant="soft"
@@ -211,13 +317,13 @@ return (
 
                     </Box>
                     <Box component="footer" sx={{ py: 3 }}>
-                       
-                        <Typography level="body-xs" sx={{ textAlign: 'center' }} > 
-                             
+
+                        <Typography level="body-xs" sx={{ textAlign: 'center' }} >
+
                             © مرکز مانیتورینگ {new Date().getFullYear()}
-                           
+
                         </Typography>
-                        
+
                     </Box>
                 </Box>
             </Box>
@@ -231,7 +337,7 @@ return (
                     right: { xs: 0, md: '50vw' },
                     transition:
                         'background-image var(--Transition-duration), left var(--Transition-duration) !important',
-                    transitionDelay: 'calc(var(--Transition-duration) + 0.1s)',
+                    transitionDelay: 'calc(var(--Transition-duration) + 0.9s)',
                     backgroundColor: 'background.level1',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
@@ -240,10 +346,12 @@ return (
                         'url(' + back1 + ')',
                     [theme.getColorSchemeSelector('dark')]: {
                         backgroundImage:
-                            'url(' + RufousHummer + ')',
+                            'url(' + back2 + ')',
                     },
                 })}
             />
         </CssVarsProvider>
+
+
     );
 }
