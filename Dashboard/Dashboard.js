@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { createTheme } from '@mui/material/styles';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import DescriptionIcon from '@mui/icons-material/Description';
 import LayersIcon from '@mui/icons-material/Layers';
@@ -13,23 +12,21 @@ import { AppProvider } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import OilBarrelIcon from '@mui/icons-material/OilBarrel';
 import OilBarrelTwoToneIcon from '@mui/icons-material/OilBarrelTwoTone';
-import { DemoProvider, useDemoRouter } from '@toolpad/core/internal';
+import { useDemoRouter } from '@toolpad/core/internal';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
- 
 import Tooltip from '@mui/material/Tooltip';
 import { PageContainer } from '@toolpad/core/PageContainer';
 import GetGrid1 from './GetGrid1';
 import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
-import Link from '@mui/material/Link';
-import { useNavigation } from "react-router"
-import { BrowserRouter, Routes, Route, Links, NavLink } from "react-router";
+
+import { BrowserRouter, Routes, Route, } from "react-router";
 import Well from './compnn/Well';
 import logo2 from './nioclogo.png';
 import DrawerF from './compnn/DrawerF';
-import DrawerC from './compnn/Draw'; 
-import { Sheet } from '@mui/joy';
 
+import { CssVarsProvider } from '@mui/joy/styles';
+import ScopedCssBaseline from '@mui/joy/ScopedCssBaseline';
 const NAVIGATION = [
   {
     kind: 'header',
@@ -191,22 +188,11 @@ function DashboardLayoutBasic(props) {
     console.log("link is 2", href);
 
 
-    // document.addEventListener('focus', function (event) {
-    //   const clickedElement = event.target;
-    //   console.log('The coucous element is:', clickedElement);
-    //   console.log('The coucous element is:', event);
-    //   // You can then access properties of clickedElement, e.g., clickedElement.id, clickedElement.tagName
-    // });
-
-
-    // var links = Array.from(document.querySelectorAll('a')).map(link => link.href);
-    // console.log("links3", links);
-
   }, [1]);
   return (
     // Remove this provider when copying and pasting into your project.
     <>
-     
+
       <AppProvider
         close={"true"}
         navigation={NAVIGATION}
@@ -214,34 +200,39 @@ function DashboardLayoutBasic(props) {
         theme={demoTheme}
 
       >
-        <DashboardLayout  
+        <DashboardLayout
           slots={{
             appTitle: CustomAppTitle,
           }} >
           <PageContainer >
 
             <>
-             
               <div>
-             
 
-{/*               
+                {/*               
              
              <Sheet color="primary" variant="soft" >
 <a>test</a>
               </Sheet> */}
 
               </div>
-              <BrowserRouter>
-                <Routes>
-                  <Route index element={<F1 />} />
-                  <Route exact path="/getgrid" element={<GetGrid1 />} />
-                  <Route exact path="/SignIn1" element={<F1 />} />
-                  <Route exact path="/integrations" element={<GetGrid1 />} />
-                  <Route exact path="/well" element={<Well />} />
-                  <Route exact path="/DrawerF" element={<DrawerF />} />
-                </Routes>
-              </BrowserRouter>
+
+
+              <Routes>
+                <Route element={<Well />}>
+                  <Route path=":Dashboard/well" element={<Well />} />
+                  <Route path="GetGrid1" element={<GetGrid1 />} />
+                </Route>
+
+                <Route index element={<Well />} />
+                <Route exact path="/dash/getgrid" element={<GetGrid1 />} />
+                <Route exact path="/SignIn1" element={<F2 />} />
+                <Route exact path="/integrations" element={<GetGrid1 />} />
+                <Route exact path="/Dash/well" element={<Well />} />
+                <Route exact path="/DrawerF" element={<DrawerF />} />
+              </Routes>
+
+
 
             </>
           </PageContainer>
