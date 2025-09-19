@@ -29,16 +29,17 @@ import MeetingRoomRoundedIcon from '@mui/icons-material/MeetingRoomRounded';
 import HotelRoundedIcon from '@mui/icons-material/HotelRounded';
 import Done from '@mui/icons-material/Done';
 import Input from '@mui/joy/Input';
-
+import Select, { selectClasses } from '@mui/joy/Select';
 import Textarea from '@mui/joy/Textarea';
 import FormControlLabel from '@mui/material/FormControlLabel';
-
+import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
+import Option from '@mui/joy/Option';
 
 
 
 
 export default function DrawerF() {
-  const [open, setOpen] = useState(false);
+  const [openn, setOpenn] = useState(false);
   const [type, setType] = useState('Guesthouse');
 
   const [amenities, setAmenities] = useState([0, 1]);
@@ -53,7 +54,7 @@ export default function DrawerF() {
         variant="outlined"
         color="neutral"
         startDecorator={<TuneIcon />}
-        onClick={() => setOpen(true)}
+        onClick={() => setOpenn(true)}
       >
         تست باز شود
       </Button>
@@ -61,8 +62,8 @@ export default function DrawerF() {
         anchor="right"
         size="md"
         variant="plain"
-        open={open}
-        onClose={() => setOpen(false)}
+        open={openn}
+        onClose={() => setOpenn(false)}
         slotProps={{
           content: {
             sx: {
@@ -162,7 +163,32 @@ export default function DrawerF() {
               }} placeholder="حجم" minRows={1} />
               <FormHelperText>مقدار حجمی که چاه تولید میکند را را وارد کنید </FormHelperText>
             </FormControl>
+            <FormControl>
+              <FormLabel>وضعیت چاه</FormLabel>
 
+              < SelectIndicator required />
+            </FormControl>
+            <FormControl>
+              <FormLabel> شرکت زیر نفع</FormLabel>
+              <Input required />
+
+            </FormControl>
+
+            <FormControl>
+              <FormLabel>نوع چاه</FormLabel>
+
+              < SelectType required />
+            </FormControl>
+             <FormControl>
+              <FormLabel>آدرس چاه</FormLabel>
+              <Input required />
+
+            </FormControl>
+            <FormControl>
+              <FormLabel>آدرس چاه</FormLabel>
+              <Input required />
+
+            </FormControl>
           </DialogContent>
 
           <Divider sx={{ mt: 'auto' }} />
@@ -185,14 +211,62 @@ export default function DrawerF() {
               پاک کردن فرم
             </Button>
             <Button onClick={() => {
-            setOpen(false);
-            setWellname('');
-            setAmenities([]);
-                setWellvalume(0);
+              setOpenn(false);
+              setWellname('');
+              setAmenities([]);
+              setWellvalume(0);
             }}>بستن</Button>
-        </Stack>
-      </Sheet>
-    </Drawer>
+          </Stack>
+        </Sheet>
+      </Drawer>
     </React.Fragment >
   );
+}
+export function SelectIndicator() {
+  return (
+    <Select
+      placeholder=".وضعیت چاه را انتخاب کنید"
+      indicator={<KeyboardArrowDown />}
+      sx={{
+        width: "Auto",
+        [`& .${selectClasses.indicator}`]: {
+          transition: '0.2s',
+          [`&.${selectClasses.expanded}`]: {
+            transform: 'rotate(-180deg)',
+          },
+        },
+      }}
+    >
+      <Option value="1">Cased</Option>
+      <Option value="2">Spudded</Option>
+      <Option value="3">Lincased</Option>
+      <Option value="4">Dry</Option>
+      <Option value="5">abonded oil</Option>
+      <Option value="6">gas</Option>
+    </Select>
+  );
+
+}
+export function SelectType() {
+    return (
+        <Select
+            placeholder="نوع چاه را انتخاب کنید"
+            indicator={<KeyboardArrowDown />}
+            sx={{
+                width: "Auto",
+                [`& .${selectClasses.indicator}`]: {
+                    transition: '0.2s',
+                    [`&.${selectClasses.expanded}`]: {
+                        transform: 'rotate(-180deg)',
+                    },
+                },
+            }}
+        >
+            <Option value="1">Construction</Option>
+            <Option value="2">Operation</Option>
+            <Option value="3">Producting</Option>
+            
+        </Select>
+    );
+
 }

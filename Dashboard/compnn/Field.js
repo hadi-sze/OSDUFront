@@ -7,7 +7,7 @@ import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
 import GetGrid1 from "../GetGrid1";
 import { useEffect } from "react";
-import { DataGrid, GridContextProvider } from '@mui/x-data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 import toast from "react-hot-toast";
 import InsightsTwoToneIcon from '@mui/icons-material/InsightsTwoTone';
 import { Divider } from "@mui/joy";
@@ -73,53 +73,10 @@ const Item = styled(Paper)(({ theme }) => ({
     }),
 }));
 
-const columns = [
-    { field: 'id', headerName: 'شناسه', width: 90 },
-    {
-        field: 'firstName',
-        headerName: 'نام چاه',
-        width: 150,
-        editable: true,
-    },
-    {
-        field: 'lastName',
-        headerName: 'Last name',
-        width: 150,
-        editable: true,
-    },
-    {
-        field: 'age',
-        headerName: 'کد چاه',
-        // type: 'number',
-        width: 110,
-        editable: true,
-    },
-    {
-        field: 'fullName',
-        headerName: 'مشخصات تکمیلی',
-        description: 'This column has a value getter and is not sortable.',
-        sortable: false,
-        width: 160,
-        valueGetter: (value, row) => `${row.firstName || ''} ${row.lastName || ''}`,
-    },
-];
 
 
 
-const rows = [
-    { id: 1, lastName: 'pogc', firstName: 'گره', age: 14 },
-    { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 31 },
-    { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 31 },
-    { id: 4, lastName: 'Stark', firstName: 'Arya', age: 11 },
-    { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-    { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-    { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-    { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-    { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-];
-
-
-const Well = () => {
+const Field = () => {
     const [open, setOpen] = useState(false);
 
     const [Welldata, setWelldata] = new useState([]);
@@ -154,12 +111,12 @@ const Well = () => {
 
                         }}
                     >
-                         
 
-                       
+
+
                         <DialogContent>
 
-                         
+
 
                             <Grid container spacing={2} sx={{ flexGrow: 1 }} >
                                 <Grid size={6}>
@@ -238,7 +195,7 @@ const Well = () => {
                                         variant="plain"
                                         transition="0.2s"
                                         sx={{
-                                            
+
                                             maxWidth: '100%',
                                             borderRadius: 'md',
                                             [`& .${accordionDetailsClasses.expanded}`]:
@@ -486,12 +443,12 @@ const Well = () => {
             </Box> */}
 
 
-           <br></br>
+            <br></br>
             <Box sx={{ flexGrow: 1, boxShadow: 7, textShadow: 1 }} >
                 <Grid container spacing={1}>
                     <Grid minHeight={"100"} size={12}>
                         <Item>
-                            <DataGrid rows={rows} columns={columns}></DataGrid>
+                            {/* <DataGrid rows={rows} columns={columns}></DataGrid> */}
                         </Item>
                     </Grid>
                     {/* <Grid size={5}>
@@ -521,7 +478,7 @@ const Well = () => {
                 <CssVarsProvider>
                     <Drawer
                         anchor="right"
-                      
+
                         variant="plain"
                         open={open}
                         onClose={() => setOpen(false)}
@@ -530,9 +487,9 @@ const Well = () => {
                                 sx: {
                                     direction: 'revert',
                                     bgcolor: 'transparent',
-                                    p: { md:1, sm: 1 },
+                                    p: { md: 1, sm: 1 },
                                     boxShadow: 'none',
-                                    width:'40%'
+                                    width: '40%'
                                 },
                             },
                         }}
@@ -630,7 +587,7 @@ const Well = () => {
 
 
 }
-export default Well
+export default Field
 
 
 
