@@ -165,17 +165,18 @@ const NAVIGATION = [
         icon: <DescriptionIcon />,
       }]
   },
- 
+
   {
     kind: 'divider',
   },
-   {
+  {
     segment: 'Base',
     title: 'اطلاعات پایه',
     icon: <LayersIcon />,
   },
 ];
 
+var API_ADDRESS = "http://127.0.0.1:8000/";
 
 const demoTheme = createTheme({
   cssVariables: {
@@ -415,6 +416,12 @@ const Gridss = () => {
   const [CoorType, SetCoorType] = useState(0)
   const [FieldType, SetFieldType] = useState(0)
 
+  const [DelBtn, setDelBtn] = useState(false)
+  const [EditBtn, setEditBtn] = useState(false)
+  const [RowSelectedD, SetRowSelected] = useState({})
+
+
+
   const [rowData, setRowData] = useState([
     { نام: "اروند", کد: "ar_30", شماره: 64950, فعال: true, makee: "Tesla", مختصات: 330.20, عمق: 64950, },
     { نام: "az_20", کد: "F-ar_30", شماره: 33850, فعال: false, makee: "Tesla", مختصات: 430.200, عمق: 64950 },
@@ -435,6 +442,8 @@ const Gridss = () => {
 
 
   const [rowData1, setRowData1] = useState();
+  const [rowDatatest, setRowDatatest] = useState();
+
   const [columnDefs1, setColumnDefs1] = useState([
     { field: "athlete", minWidth: 160 },
     { field: "age" },
@@ -449,28 +458,106 @@ const Gridss = () => {
   ]);
 
 
+  const [columnDefstest, setColumnDefstest] = useState([
+    { field: "FIELD_ID" },
+    { field: "CRS_NAME" },
+    { field: "FIELD_ABBREVATION" },
+    { field: "FIELD_TYPE_Name" },
+    { field: "FIELD_name" },
+    { field: "IS_ACTIVE" },
+    { field: "REMARK" },
+    { field: "ROW_CHANEGED_BY" },
+    { field: "ROW_CHANGED_DATE" },
+    { field: "ROW_CREATED_BY" },
+    { field: "ROW_CREATED_DATE" },
+    { field: "R_FIELD_TYPE_ID_id" },
+    { field: "SOURCE_NAME" },
+    { field: "X_COORDINATE" },
+    { field: "Y_COORDINATE" },
+
+  ]);
 
 
   const Rowselected = (e) => {
 
     console.log("click", e)
     const getrow = e.data;
+    SetRowSelected(getrow);
     console.log("getrow", getrow)
+    console.log("getrow", getrow['FIELD_id'])
+    if (getrow['FIELD_id'] !== undefined || getrow['FIELD_id'] !== null) {
+      setDelBtn(true);
+      setEditBtn(true);
+    }
 
 
 
+
+  }
+  const RowDelete = (e) => {
+    let clicked = Basemodels;
+    console.log("click", e)
+    console.log("in checkmaster", clicked)
+    console.log("selectedRowID", RowSelectedD['FIELD_ID'])
+    if (clicked == 2) {
+      var APINAME = "osdu/api/DeleteField"
+
+      axios.delete(API_ADDRESS + APINAME, {
+        headers: {
+          Authorization: true
+        },
+        data: {
+          FIELD_id: RowSelectedD['FIELD_ID'],
+        }
+
+      }).then(function (response) {
+        // console.log(response);
+        // alert(response.status)
+        if (response.status === 200) {
+          toast.success('اطلاعات یافت شد')
+        } else {
+
+          toast.error("اطلاعات اشتباه است")
+        }
+      })
+        .catch(function (error) {
+
+          console.log(error);
+          toast.error("  ارتباط با سرور قطع شده است")
+        })
+
+    }
   }
   let rowImmutableStore;
 
   const getRowId = useCallback((params) => String(params.data.id), []);
 
+  // fetch("https://www.ag-grid.com/example-assets/olympic-winners.json")
+  //fetch("http://localhost:8000/osdu/api/getfield")
+
   const onGridReady = useCallback((params) => {
+
+    fetch("http://localhost:8000/osdu/api/getfield")
+      .then((resp) => resp.json())
+      .then((data) => {
+        console.log("data", data)
+        setRowDatatest(data);
+      }).catch(function (error) {
+
+        console.log(error);
+        toast.error("  ارتباط با سرور قطع شده است")
+      })
     fetch("https://www.ag-grid.com/example-assets/olympic-winners.json")
       .then((resp) => resp.json())
       .then((data) => {
+        console.log("data", data)
         data.forEach((item, index) => (item.id = index));
         rowImmutableStore = data;
         setRowData1(rowImmutableStore);
+      }).catch(function (error) {
+
+        console.log(error);
+        toast.error(" اتصال اینترنت قطع شده است")
       });
   }, []);
   const defaultColDef1 = useMemo(() => {
@@ -861,7 +948,7 @@ const Gridss = () => {
   }
   const Feild_OP = () => {
 
-    var API_ADDRESS = "http://127.0.0.1:8000/";
+
     var APINAME = "osdu/api/AddField1"
     console.log("FieldName", FieldName)
     console.log("FieldLong", FieldLong)
@@ -1038,7 +1125,7 @@ const Gridss = () => {
                   <Button onClick={openDrawer}>ایجاد</Button>
 
 
-                  <Button disabled size="md" color="danger">
+                  <Button onClick={RowDelete} size="md" color="danger">
                     حذف
                   </Button>
                 </Stack>
@@ -1101,6 +1188,28 @@ const Gridss = () => {
             <AgGridReact
               rowData={rowData1}
               columnDefs={columnDefs1}
+              defaultColDef={defaultColDef1}
+              getRowId={getRowId}
+
+              onGridReady={onGridReady}
+              onCellEditRequest={onCellEditRequest}
+              onRowClicked={Rowselected}
+              Rowselected={true}
+              enableRtl={true}
+              onRowSelected={true}
+              gridOptions={gridOptions}
+            />
+          </div>
+
+
+
+        </Grid>
+        <Grid size={12} paddingTop={2}>
+
+          <div style={{ height: 300 }} >
+            <AgGridReact
+              rowData={rowDatatest}
+              columnDefs={columnDefstest}
               defaultColDef={defaultColDef1}
               getRowId={getRowId}
 
