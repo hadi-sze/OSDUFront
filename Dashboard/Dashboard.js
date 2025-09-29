@@ -31,7 +31,7 @@ import ScopedCssBaseline from '@mui/joy/ScopedCssBaseline';
 import GiteRoundedIcon from '@mui/icons-material/GiteRounded';
 import Drawer from '@mui/joy/Drawer';
 import Sheet from '@mui/joy/Sheet';
-
+import axios from 'axios';
 import Checkbox from '@mui/joy/Checkbox';
 import Done from '@mui/icons-material/Done';
 import FormHelperText from '@mui/joy/FormHelperText';
@@ -55,7 +55,7 @@ import Modal from '@mui/joy/Modal';
 import ModalDialog from '@mui/joy/ModalDialog';
 import DialogTitle from '@mui/joy/DialogTitle';
 import DialogContent from '@mui/joy/DialogContent';
-
+import toast, { Toaster } from 'react-hot-toast';
 import Add from '@mui/icons-material/Add';
 import Textarea from '@mui/joy/Textarea';
 import Select, { selectClasses } from '@mui/joy/Select';
@@ -165,53 +165,14 @@ const NAVIGATION = [
         icon: <DescriptionIcon />,
       }]
   },
+ 
   {
     kind: 'divider',
   },
-  {
-    kind: 'header',
-    title: 'گزارش گیری',
-  },
-  {
-    segment: 'reports',
-    title: 'گزارش ها',
-    icon: <BarChartIcon />,
-    children: [
-      {
-        segment: 'dailyremoprt',
-        title: 'گزارش روزانه',
-        icon: <DescriptionIcon />,
-      },
-      {
-        segment: 'sales',
-        title: 'گزارش ماهانه تولید',
-        icon: <DescriptionIcon />,
-      }, {
-        segment: 'Gassales',
-        title: 'گزارش روزانه گاز',
-        icon: <DescriptionIcon />,
-      },
-      {
-        segment: 'mounthsales',
-        title: 'گزارش ماهانه تولید گاز',
-        icon: <DescriptionIcon />,
-      },
-
-      {
-        segment: 'traffic',
-        title: 'گزارش بر اساس معاونت ها',
-        icon: <DescriptionIcon />,
-
-      },
-    ],
-  },
-  {
-    segment: 'integrations',
-    title: 'گزارش تجمیعی',
+   {
+    segment: 'Base',
+    title: 'اطلاعات پایه',
     icon: <LayersIcon />,
-
-
-
   },
 ];
 
@@ -311,7 +272,8 @@ function DashboardLayoutBasic(props) {
   return (
     // Remove this provider when copying and pasting into your project.
     <>
-
+      <Toaster position="top-left" reverseOrder={true}
+      />
       <AppProvider
         close={"true"}
         navigation={NAVIGATION}
@@ -450,6 +412,8 @@ const myTheme = themeQuartz
 
 const Gridss = () => {
   const [Basemodels, SetBasemodels] = useState(0)
+  const [CoorType, SetCoorType] = useState(0)
+  const [FieldType, SetFieldType] = useState(0)
 
   const [rowData, setRowData] = useState([
     { نام: "اروند", کد: "ar_30", شماره: 64950, فعال: true, makee: "Tesla", مختصات: 330.20, عمق: 64950, },
@@ -554,6 +518,8 @@ const Gridss = () => {
 
     return eGui;
   }
+
+
 
   function actionCellRenderer(params) {
     let eGui = document.createElement('div');
@@ -731,10 +697,10 @@ const Gridss = () => {
   const [FieldLong, setFieldLong] = useState('')
   const [ABRVField, setABRVField] = useState('')
   const [FieldName, setFieldName] = useState('')
-  const [Feild_IS_Active, setFeild_IS_Active] = useState(1)
 
 
-  
+
+
   const [type, setType] = useState('Guesthouse');
 
 
@@ -744,7 +710,7 @@ const Gridss = () => {
   const [WellCode, setWellcode] = useState(' ')
   const [longitude, setLongitude] = useState(0)
   const [Latitude, setLatitude] = useState(0)
-
+  const [Feild_IS_Active, setFeild_IS_Active] = useState(1)
 
   const openDrawer = () => {
     console.log("Basemodels", Basemodels)
@@ -893,7 +859,41 @@ const Gridss = () => {
       </>
     )
   }
+  const Feild_OP = () => {
 
+    var API_ADDRESS = "http://127.0.0.1:8000/";
+    var APINAME = "osdu/api/AddField1"
+    console.log("FieldName", FieldName)
+    console.log("FieldLong", FieldLong)
+    console.log("ABRVField", ABRVField)
+
+    axios.post(API_ADDRESS + APINAME, {
+      FIELD_name: FieldName,
+      X_COORDINATE: FieldLong,
+      Y_COORDINATE: FielLath,
+      ABRVField: ABRVField,
+      FieldType: FieldType,
+      CRIS_ID: parseInt(CoorType),
+      IS_ACTIVE: Feild_IS_Active,
+      currentuseer: 'Admin',
+    })
+      .then(function (response) {
+        // console.log(response);
+        // alert(response.status)
+        if (response.status === 200) {
+          toast.success('اطلاعات یافت شد')
+        } else {
+
+          toast.error("اطلاعات اشتباه است")
+        }
+      })
+      .catch(function (error) {
+
+        console.log(error);
+        toast.error("  ارتباط با سرور قطع شده است")
+      })
+
+  }
   const FieldForm = () => {
 
     return (
@@ -1268,22 +1268,22 @@ const Gridss = () => {
                   onChange={(e) => {
                     setFieldName(e.target.value);
                   }}
-                placeholder='نام مخزن را وارد کنید' ></Textarea>
-                
+                  placeholder='نام مخزن را وارد کنید' ></Textarea>
+
                 <FormHelperText>‌نام مخرن را وارد کنید</FormHelperText>
               </FormControl>
 
               <FormControl>
                 <FormLabel>نام اختصار</FormLabel>
-                <Textarea  value={ABRVField} placeholder="نام اختصار" onChange={(e) => {setABRVField(e.target.value)}} />
+                <Textarea value={ABRVField} placeholder="نام اختصار" onChange={(e) => { setABRVField(e.target.value) }} />
                 <FormHelperText>نام اختصاری مخزن را وارد کنید</FormHelperText>
               </FormControl>
- 
+
               <FormControl >
 
                 <FormLabel>طول جغرافیایی</FormLabel>
-                <Textarea name="Soft" placeholder="طول جغرافیا" variant="soft"  
-                onChange={(e) => {
+                <Textarea name="Soft" placeholder="طول جغرافیا" variant="soft"
+                  onChange={(e) => {
                     setFieldLong(e.target.value);
                   }} />
                 <FormHelperText> طول جغرافیایی چاه را .ارد کنید </FormHelperText>
@@ -1291,10 +1291,10 @@ const Gridss = () => {
               <FormControl >
 
                 <FormLabel>عرض جغرافیایی</FormLabel>
-                <Textarea value={FielLath} FieldLong name="Soft" placeholder="طول جغرافیا" variant="soft" required 
-                 onChange={(e) => {
+                <Textarea value={FielLath} FieldLong name="Soft" placeholder="طول جغرافیا" variant="soft" required
+                  onChange={(e) => {
                     setFielLath(e.target.value);
-                  }}/>
+                  }} />
                 <FormHelperText> عرض جغرافیایی چاه را .ارد کنید </FormHelperText>
               </FormControl>
 
@@ -1306,12 +1306,23 @@ const Gridss = () => {
                   </FormLabel>
                   <FormHelperText sx={{ typography: 'body-sm' }}>
 
-                    <SelectFieldType />
+                    <SelectFieldType state={SetFieldType} />
                   </FormHelperText>
                 </Box>
 
               </FormControl>
+              <FormControl orientation="horizontal">
+                <Box sx={{ flex: 1, mt: 1, mr: 1 }}>
+                  <FormLabel sx={{ typography: 'title-sm' }}>
+                    نوع مختصات
+                  </FormLabel>
+                  <FormHelperText sx={{ typography: 'body-sm' }}>
 
+                    <SelectFieldCoor state={SetCoorType} />
+                  </FormHelperText>
+                </Box>
+
+              </FormControl>
 
             </DialogContent>
 
@@ -1319,8 +1330,8 @@ const Gridss = () => {
             <FormControl>
               <FormLabel>وضعیت مخزن</FormLabel>
               <RadioGroup orientation="horizontal" defaultValue="outlined" name="radio-buttons-group">
-                <Radio value="1" label="فعال" variant="outlined" />
-                <Radio value="2" label="غیر فعال" variant="soft" />
+                <Radio value="1" label="فعال" variant="outlined" onClick={(e) => setFeild_IS_Active(1)} />
+                <Radio value="2" label="غیر فعال" variant="soft" onClick={(e) => setFeild_IS_Active(2)} />
 
               </RadioGroup>
             </FormControl>
@@ -1338,7 +1349,7 @@ const Gridss = () => {
               >
                 پاک کردن
               </Button>
-              <Button onClick={() => setOpen(false)}>ذخیره</Button>
+              <Button onClick={Feild_OP}>ذخیره</Button>
             </Stack>
           </Sheet>
         </Drawer>
@@ -1402,6 +1413,33 @@ export function SelectFieldType(props) {
       >
         <Option value="1">نفتی</Option>
         <Option value="2">گازی</Option>
+
+
+      </Select>
+    </CssVarsProvider >
+  );
+
+}
+export function SelectFieldCoor(props) {
+  return (
+    <CssVarsProvider >
+      <Select
+        onChange={(e, mewvalue) => props.state(mewvalue)}
+
+        placeholder="نوع مختصات را انتخاب کنید"
+        indicator={<KeyboardArrowDown />}
+        sx={{
+          width: "100%",
+          [`& .${selectClasses.indicator}`]: {
+            transition: '0.2s',
+            [`&.${selectClasses.expanded}`]: {
+              transform: 'rotate(-180deg)',
+            },
+          },
+        }}
+      >
+        <Option value="1">WGS 84</Option>
+        <Option value="2">UTM</Option>
 
 
       </Select>
