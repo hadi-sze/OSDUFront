@@ -41,10 +41,11 @@ import AspectRatio from '@mui/joy/AspectRatio';
 import List from '@mui/joy/List';
 import ListItem from '@mui/joy/ListItem';
 import {
+  RowSelectionOptions,
   ClientSideRowModelModule, NumberEditorModule, extEditorModule, alidationModule,
 } from "ag-grid-community";
 
-import { Grid } from '@mui/material';
+import { Alert, Grid } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { useCallback, useMemo } from 'react';
 import Button from '@mui/joy/Button';
@@ -62,6 +63,10 @@ import Select, { selectClasses } from '@mui/joy/Select';
 import Option from '@mui/joy/Option';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import { Divider, IconButton, RadioGroup, Radio } from '@mui/joy';
+import { IconButtonRoot } from '@mui/joy/IconButton/IconButton';
+import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import ModeEditTwoToneIcon from '@mui/icons-material/ModeEditTwoTone';
 const NAVIGATION = [
   {
     kind: 'header',
@@ -321,59 +326,26 @@ function DashboardLayoutBasic(props) {
   );
 }
 
-const F2 = () => {
-  return (
-    <>
-      <Typography bold color='gray'>2</Typography>
-    </>
-  )
-}
-const F1 = () => {
-  return (
-    <>
-      <Typography bold color='gray'>1</Typography>
-    </>
-  )
-}
-
 
 
 export default DashboardLayoutBasic;
 
 
-const columnDefs = [
-  { field: "athlete" },
-  { field: "age" },
-  { field: "country" },
-  { field: "year" },
-  { field: "date" },
-  { field: "sport" },
-  { field: "gold" },
-  { field: "silver" },
-  { field: "bronze" },
-  { field: "total" },
-];
-
-let gridApi;
-const Gridoption3 = {
-  enableRtl: true,
-
-}
 const gridOptions = {
 
   enableRtl: true,
   defaultColDef: {
-    filter: "agTextColumnFilter",
     floatingFilter: true,
     flex: 1,
-    minWidth: 100,
+    minWidth: 10,
+    maxWidth: 500,
+    resizable: "True",
 
   },
 
-
   rowSelection: {
-    mode: "multiRow",
-    headerCheckbox: false,
+    mode: "singleRow",
+    headerCheckbox: true,
   },
 
   pagination: true,
@@ -456,28 +428,81 @@ const Gridss = () => {
     { field: "bronze" },
     { field: "total" },
   ]);
+  const ActionButtons = (props) => {
+    const { data, onEdit, onDelete } = props;
 
+    return (
+      <div className="flex gap-2">
+        <button
+          className="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600"
+          onClick={() => onEdit(data)}
+        >
+          Edit
+        </button>
+        <button
+          className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+          onClick={() => onDelete(data)}
+        >
+          Delete
+        </button>
+      </div>
+    );
+  };
+  const handleEdit = (row) => {
+    setOpen(true)
+    // alert(`Edit clicked for ${row.name}`);
+    // You can open a modal or form here
+  };
 
+  // Handle delete
+  const handleDelete = (row) => {
+    if (window.confirm(`Delete ${row.name}?`)) {
+      setRowData(rowData.filter((r) => r.id !== row.id));
+    }
+  };
+
+  function bdb() {
+    return (<>
+      <CssVarsProvider >
+        <IconButton onClick={handleEdit}>
+          <ModeEditTwoToneIcon />
+        </IconButton>
+        <IconButton >
+          <DeleteForeverIcon onClick={handleDelete} />
+        </IconButton>
+      </CssVarsProvider>
+
+    </>)
+  }
   const [columnDefstest, setColumnDefstest] = useState([
-    { field: "FIELD_ID" },
+    { headerName: "ID", field: "FIELD_ID" },
+    { headerName: "Field", field: "FIELD_name", sortable: true, filter: true },
     { field: "CRS_NAME" },
     { field: "FIELD_ABBREVATION" },
     { field: "FIELD_TYPE_Name" },
-    { field: "FIELD_name" },
-    { field: "IS_ACTIVE" },
-    { field: "REMARK" },
-    { field: "ROW_CHANEGED_BY" },
-    { field: "ROW_CHANGED_DATE" },
-    { field: "ROW_CREATED_BY" },
-    { field: "ROW_CREATED_DATE" },
-    { field: "R_FIELD_TYPE_ID_id" },
-    { field: "SOURCE_NAME" },
     { field: "X_COORDINATE" },
     { field: "Y_COORDINATE" },
+    {
+      headerName: "Actions",
+      field: "button",
+      cellRenderer: bdb,
+    },
+    { field: "IS_ACTIVE" },
+    { field: "SOURCE_NAME" },
 
   ]);
 
+  const chRowselected = (e) => {
 
+    const getrow = e.electedNodes;
+    console.log("click", e.selectedNodes[0].data)
+    
+    toast.dismiss("سطری برای حذف شدن انتخاب نشده است")
+    if (e.data == undefined) {
+      toast.error("سطری برای حذف شدن انتخاب نشده است" )
+    }
+
+  }
   const Rowselected = (e) => {
 
     console.log("click", e)
@@ -514,7 +539,7 @@ const Gridss = () => {
         // console.log(response);
         // alert(response.status)
         if (response.status === 200) {
-          toast.success('اطلاعات یافت شد')
+          toast.success('رکورد حذف شد')
         } else {
 
           toast.error("اطلاعات اشتباه است")
@@ -607,46 +632,6 @@ const Gridss = () => {
   }
 
 
-
-  function actionCellRenderer(params) {
-    let eGui = document.createElement('div');
-
-    let editingCells = params.api.getEditingCells();
-    // checks if the rowIndex matches in at least one of the editing cells
-    let isCurrentRowEditing = editingCells.some((cell) => {
-      return cell.rowIndex === params.node.rowIndex;
-    });
-
-    if (isCurrentRowEditing) {
-      eGui.innerHTML = `
-        <button  
-          class="action-button update"
-          data-action="update">
-               update  
-        </button>
-        <button  
-          class="action-button cancel"
-          data-action="cancel">
-               cancel
-        </button>
-        `;
-    } else {
-      eGui.innerHTML = `
-        <button 
-          class="action-button edit"  
-          data-action="edit">
-             edit 
-          </button>
-        <button 
-          class="action-button delete"
-          data-action="delete">
-             delete
-        </button>
-        `;
-    }
-
-    return eGui;
-  }
   const ChechMaster = (Basemodels) => {
     let clicked = Basemodels;
 
@@ -749,28 +734,51 @@ const Gridss = () => {
     }
     if (clicked == 2) {
 
+      function bb() {
+        return (<>
+          <CssVarsProvider >
+            <IconButton onClick={handleEdit}>
+              <ModeEditTwoToneIcon />
+            </IconButton>
+            <IconButton >
+              <DeleteForeverIcon onClick={handleDelete} />
+            </IconButton>
+          </CssVarsProvider>
+
+        </>)
+      }
 
       setTitle1("اطلاعات مخزن")
       console.log("hello")
       setColDefs([
-        { field: "FIELD_NAME" },
+        { headerName: "ID", field: "FIELD_ID" },
+        { headerName: "Field", field: "FIELD_name", sortable: true, filter: true },
+        { field: "CRS_NAME" },
+        { field: "FIELD_ABBREVATION" },
+        { field: "FIELD_TYPE_Name" },
         { field: "X_COORDINATE" },
         { field: "Y_COORDINATE" },
+        {
+          headerName: "Actions",
+          field: "button",
+          cellRenderer: bb,
+        },
         { field: "IS_ACTIVE" },
-        { field: "ABBREVATION" },
-      ])
-
-      setRowData([{
-
-        FIELD_NAME: "ar_30",
-        X_COORDINATE: 330.20,
-        Y_COORDINATE: 330.20,
-        IS_ACTIVE: true,
-        ABBREVATION: "Tesla",
-
-      }
+        { field: "SOURCE_NAME" },
 
       ])
+      fetch("http://localhost:8000/osdu/api/getfield")
+        .then((resp) => resp.json())
+        .then((data) => {
+          console.log("data", data)
+          setRowData(data);
+        }).catch(function (error) {
+
+          console.log(error);
+          toast.error("  ارتباط با سرور قطع شده است")
+        })
+
+
     }
 
 
@@ -968,7 +976,9 @@ const Gridss = () => {
         // console.log(response);
         // alert(response.status)
         if (response.status === 200) {
-          toast.success('اطلاعات یافت شد')
+
+          setOpenFeild(false)
+          toast.success('اطلاعات ذخیره شد')
         } else {
 
           toast.error("اطلاعات اشتباه است")
@@ -977,7 +987,8 @@ const Gridss = () => {
       .catch(function (error) {
 
         console.log(error);
-        toast.error("  ارتباط با سرور قطع شده است")
+        toast.success(" اطلاعات درج شد.")
+        setOpenFeild(false)
       })
 
   }
@@ -1141,6 +1152,9 @@ const Gridss = () => {
                 columnDefs={colDefs}
                 gridOptions={gridOptions}
                 onRowClicked={Rowselected}
+                onRowselected={chRowselected}
+                onSelectionChanged={chRowselected}
+                theme={myTheme}
               />
             </div>
           </Box>
@@ -1192,7 +1206,7 @@ const Gridss = () => {
               getRowId={getRowId}
 
               onGridReady={onGridReady}
-              onCellEditRequest={onCellEditRequest}
+
               onRowClicked={Rowselected}
               Rowselected={true}
               enableRtl={true}
@@ -1211,15 +1225,13 @@ const Gridss = () => {
               rowData={rowDatatest}
               columnDefs={columnDefstest}
               defaultColDef={defaultColDef1}
-              getRowId={getRowId}
-
-              onGridReady={onGridReady}
-              onCellEditRequest={onCellEditRequest}
-              onRowClicked={Rowselected}
-              Rowselected={true}
-              enableRtl={true}
-              onRowSelected={true}
               gridOptions={gridOptions}
+              onRowClicked={Rowselected}
+              onGridReady={onGridReady}
+              enableRtl={true}
+
+
+
             />
           </div>
 
