@@ -23,8 +23,11 @@
     min-width: 600px;
 }
  
-
 .muirtl-1y8nxit-MuiDrawer-docked .MuiDrawer-paper {
    
     width: auto !important;
+}
+
+.css-8dyk8f-MuiContainer-root {
+        max-width: 2095px !important;
 }

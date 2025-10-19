@@ -7,14 +7,17 @@ import OilBarrelIcon from '@mui/icons-material/OilBarrel';
 import OilBarrelTwoToneIcon from '@mui/icons-material/OilBarrelTwoTone';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import DescriptionIcon from '@mui/icons-material/Description';
-
+import ArrowCircleRightRoundedIcon from '@mui/icons-material/ArrowCircleRightRounded';
+import FactoryOutlinedIcon from '@mui/icons-material/FactoryOutlined';
+import FactoryTwoToneIcon from '@mui/icons-material/FactoryTwoTone';
+import TempleHinduTwoToneIcon from '@mui/icons-material/TempleHinduTwoTone';
 import './App.css';
 import { createTheme } from '@mui/material/styles';
 import { CacheProvider } from '@emotion/react';
 import createCache from '@emotion/cache';
 import rtlPlugin from 'stylis-plugin-rtl';
 import { prefixer } from 'stylis';
- 
+
 
 const theme = createTheme({
     direction: 'rtl', // Both here and <body dir="rtl">
@@ -33,30 +36,30 @@ const NAVIGATION = [
 
     {
         segment: 'Compony',
-        title: 'شرکت ملی نفت ایران (NIOC)',
+        title: 'National iranian oil Company',
         icon: <DashboardIcon />,
         children: [
             {
                 segment: 'NISOC',
-                title: 'شرکت مناطق نفت خیز جنوب (NISOC)',
+                title: '(NISOC)',
                 icon: <GiteRoundedIcon />,
                 children: [
                     {
                         segment: 'karoon',
-                        title: ' نفت کارون',
+                        title: 'karoon',
                         icon: <OilBarrelTwoToneIcon />,
 
                     },
                     {
                         segment: 'Maroon',
-                        title: 'شرکت بهره برداری نفت و گاز مارون',
+                        title: 'Maroon',
                         icon: <BusinessTwoToneIcon />,
                     }]
 
             },
             {
                 segment: 'AOGC',
-                title: 'شرکت نفت و گاز ادوندان (AOGC)',
+                title: '(AOGC)',
                 icon: <GiteRoundedIcon />,
             },
             {
@@ -73,23 +76,23 @@ const NAVIGATION = [
             },
             {
                 segment: 'PEDEC',
-                title: 'شرکت مهندسی و توسعه (PEDEC)',
+                title: 'Pedec',
                 icon: <GiteRoundedIcon />,
             },
             {
                 segment: 'POGC',
-                title: 'شرکت نفت و گاز پارس (POGC)',
+                title: 'Pars OIL and Gas Company',
                 icon: <GiteRoundedIcon />,
                 children: [
                     {
                         segment: 'karoon',
-                        title: ' گاز ',
+                        title: ' karoon ',
                         icon: <OilBarrelTwoToneIcon />,
 
                     },
                     {
                         segment: 'Maroon',
-                        title: 'شرکت بهره برداری گاز ',
+                        title: 'Maroon',
                         icon: <OilBarrelIcon />,
                     }]
             },
@@ -114,18 +117,138 @@ const NAVIGATION = [
     },
     {
         segment: 'baseModels',
-        title: 'اطلاعات اصلی',
+        title: 'Refference',
         icon: <OilBarrelTwoToneIcon />,
         children: [
             {
-                segment: 'Well',
-                title: 'چاه',
+                segment: 'BaseModels',
+                title: 'BaseModels',
                 icon: <DescriptionIcon />,
             },
             {
-                segment: 'Field',
-                title: 'مخزن',
+                segment: 'Well',
+                title: 'Well',
                 icon: <DescriptionIcon />,
+                children: [
+                    {
+                        segment: 'R_WELL_CLASS',
+                        title: 'R_WELL_CLASS',
+                        icon: <DescriptionIcon />,
+                    }],
+            },
+            {
+                segment: 'WellBORE',
+                title: 'WellBORE',
+                icon: <DescriptionIcon />,
+                children: [
+                    {
+                        segment: 'R_WELLBORE_TYPE',
+                        title: 'R_WELLBORE_TYPE',
+                        icon: <DescriptionIcon />,
+                    }, {
+                        segment: 'R_WELLBORE_TYPE',
+                        title: 'R_WELLBORE_TYPE',
+                        icon: <DescriptionIcon />,
+                    }
+                ],
+            },
+            {
+                segment: 'WellTUBULAR',
+                title: 'WellTUBULARls',
+                icon: <DescriptionIcon />,
+                children: [
+                    {
+                        segment: 'R_TUBULAR_TYPE',
+                        title: 'R_TUBULAR_TYPE',
+                        icon: <DescriptionIcon />,
+                    }],
+            },
+            {
+                segment: 'Field',
+                title: 'Field',
+                icon: <DescriptionIcon />,
+                children: [
+                    {
+                        segment: 'R_FEILD_TYPE',
+                        title: 'R_FEILD_TYPE',
+                        icon: <DescriptionIcon />,
+                    }],
+
+            },
+            {
+                segment: 'Pool',
+                title: 'Pool',
+                icon: <DescriptionIcon />,
+                children: [
+                    {
+                        segment: 'R_POOL_TYPE',
+                        title: 'R_POO_TYPE',
+                        icon: <ArrowCircleRightRoundedIcon />,
+                    },
+                    {
+                        segment: 'R_POOL_STATUS',
+                        title: 'R_POO_STATUS',
+                        icon: <ArrowCircleRightRoundedIcon />,
+                    }
+
+                ],
+
+            },
+            {
+                segment: 'Product',
+                title: 'Product',
+                icon: <FactoryOutlinedIcon />,
+                children: [
+                    {
+                        segment: 'Report_Pruduct',
+                        title: 'Report_Pruduct',
+                        icon: <FactoryTwoToneIcon />,
+                    },
+                    {
+                        segment: 'store',
+                        title: 'store',
+                        icon: <TempleHinduTwoToneIcon />,
+                    }
+
+                ],
+
+            },
+            {
+                segment: 'General',
+                title: 'General',
+                icon: <DescriptionIcon />,
+                children: [
+                    {
+                        segment: 'R_FEILD_TYPE',
+                        title: 'R_FEILD_TYPE',
+                        icon: <DescriptionIcon />,
+                    }],
+
+            },
+
+
+            {
+                segment: 'System',
+                title: 'System',
+                icon: <DescriptionIcon />,
+                children: [
+                    {
+                        segment: 'R_ALARM_TYPE',
+                        title: 'R_ALARM_TYPE',
+                        icon: <DescriptionIcon />,
+                    }],
+
+            },
+            {
+                segment: 'Other',
+                title: 'Other',
+                icon: <DescriptionIcon />,
+                children: [
+                    {
+                        segment: 'test',
+                        title: 'test',
+                        icon: <DescriptionIcon />,
+                    }],
 
             }]
     },
@@ -164,15 +287,15 @@ export default function App1() {
 
     return (
         <div className="App">
-            <CacheProvider value={cacheRtl}>
-                <ReactRouterAppProvider
-                    navigation={NAVIGATION}
-                    branding={BRANDING}
-                    theme={demoTheme}
-                >
-                    <Outlet />
-                </ReactRouterAppProvider>
-            </CacheProvider>
+
+            <ReactRouterAppProvider
+                navigation={NAVIGATION}
+                branding={BRANDING}
+                theme={demoTheme}
+            >
+                <Outlet />
+            </ReactRouterAppProvider>
+
         </div>
     );
 }

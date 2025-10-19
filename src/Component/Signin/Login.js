@@ -229,7 +229,7 @@ export default function SignInSide() {
                             <Stack sx={{ gap: 4, mb: 2 }}>
                                 <Stack sx={{ gap: 1 }}>
                                     <Typography component="h1" level="h3">
-                                        سامانه اطلاعات یکپارچه نفت
+                                       سامانه مدیریت اطلاعات صنعت نفت ایران
                                     </Typography>
                                     <Typography level="body-sm">
                                         مرکز مانیتورینگ شرکت نفت -
@@ -331,10 +331,10 @@ export default function SignInSide() {
                 sx={(theme) => ({
                     height: '100%',
                     position: 'fixed',
-                    left: 0,
+                    right: 0,
                     top: 0,
                     bottom: 0,
-                    right: { xs: 0, md: '50vw' },
+                    left: { xs: 0, md: '50vw' },
                     transition:
                         'background-image var(--Transition-duration), left var(--Transition-duration) !important',
                     transitionDelay: 'calc(var(--Transition-duration) + 0.9s)',

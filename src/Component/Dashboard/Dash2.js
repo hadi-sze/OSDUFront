@@ -49,21 +49,21 @@ const NAVIGATION = [
         icon: <BarChartIcon />,
         children: [
             {
-                segment: 'sales',
+                segment: 'sales1',
                 title: 'گزارش روزانه',
                 icon: <DescriptionIcon />,
             },
             {
-                segment: 'sales',
+                segment: 'sales2',
                 title: 'گزارش ماهانه تولید',
                 icon: <DescriptionIcon />,
             }, {
-                segment: 'sales',
+                segment: 'sales3',
                 title: 'گزارش روزانه گاز',
                 icon: <DescriptionIcon />,
             },
             {
-                segment: 'sales',
+                segment: 'sales4',
                 title: 'گزارش ماهانه تولید گاز',
                 icon: <DescriptionIcon />,
             },

@@ -4,7 +4,7 @@ import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
 import Typography from '@mui/material/Typography';
 
-
+import './dashboard.css';
 import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
  
@@ -27,8 +27,8 @@ function CustomAppTitle() {
     <Stack direction="row" alignItems="center" spacing={2}>
       <img src={logo2} className='Dash_logo' alt="logo" />
       {/* <CloudCircleIcon fontSize="large" color="primary" /> */}
-      <Typography variant="h6">سامانه یکپارچه osdu</Typography>
-      <Chip size="small" label="آزمایشی" color="info" />
+      <Typography variant="h6">  Data Platform OSDU</Typography>
+      <Chip size="small" label="Developing" color="info" />
       {/* <Tooltip title="Connected to production">
         <CheckCircleIcon color="success" fontSize="small" />
       </Tooltip> */}

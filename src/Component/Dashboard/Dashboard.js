@@ -5,10 +5,10 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { createTheme } from '@mui/material/styles';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import BarChartIcon from '@mui/icons-material/BarChart';
+
 import DescriptionIcon from '@mui/icons-material/Description';
 import LayersIcon from '@mui/icons-material/Layers';
-import { AppProvider } from '@toolpad/core/AppProvider';
+import './dashboard.css';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import OilBarrelIcon from '@mui/icons-material/OilBarrel';
 import OilBarrelTwoToneIcon from '@mui/icons-material/OilBarrelTwoTone';
@@ -20,14 +20,13 @@ import { themeQuartz } from 'ag-grid-community';
 import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
 import { AgGridReact } from 'ag-grid-react';
-import { BrowserRouter, Routes, Route, } from "react-router";
-import Well from './compnn/Well';
+ 
 import logo2 from './nioclogo.png';
-import DrawerF from './compnn/DrawerF';
+
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 import { CssVarsProvider } from '@mui/joy/styles';
 import BusinessTwoToneIcon from '@mui/icons-material/BusinessTwoTone';
-import ScopedCssBaseline from '@mui/joy/ScopedCssBaseline';
+ 
 import GiteRoundedIcon from '@mui/icons-material/GiteRounded';
 import Drawer from '@mui/joy/Drawer';
 import Sheet from '@mui/joy/Sheet';
@@ -36,7 +35,7 @@ import Checkbox from '@mui/joy/Checkbox';
 import Done from '@mui/icons-material/Done';
 import FormHelperText from '@mui/joy/FormHelperText';
 import ModalClose from '@mui/joy/ModalClose';
-
+import { ReactRouterAppProvider } from '@toolpad/core/react-router';
 import AspectRatio from '@mui/joy/AspectRatio';
 import List from '@mui/joy/List';
 import ListItem from '@mui/joy/ListItem';
@@ -45,28 +44,26 @@ import {
   ClientSideRowModelModule, NumberEditorModule, extEditorModule, alidationModule,
 } from "ag-grid-community";
 
-import { Alert, Grid } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
+import {  Grid } from '@mui/material';
+ 
 import { useCallback, useMemo } from 'react';
 import Button from '@mui/joy/Button';
 import FormControl from '@mui/joy/FormControl';
 import FormLabel from '@mui/joy/FormLabel';
-import Input from '@mui/joy/Input';
-import Modal from '@mui/joy/Modal';
-import ModalDialog from '@mui/joy/ModalDialog';
+ 
 import DialogTitle from '@mui/joy/DialogTitle';
 import DialogContent from '@mui/joy/DialogContent';
 import toast, { Toaster } from 'react-hot-toast';
-import Add from '@mui/icons-material/Add';
+
 import Textarea from '@mui/joy/Textarea';
 import Select, { selectClasses } from '@mui/joy/Select';
 import Option from '@mui/joy/Option';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import { Divider, IconButton, RadioGroup, Radio } from '@mui/joy';
-import { IconButtonRoot } from '@mui/joy/IconButton/IconButton';
-import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
+ 
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ModeEditTwoToneIcon from '@mui/icons-material/ModeEditTwoTone';
+import { Outlet } from 'react-router';
 const NAVIGATION = [
   {
     kind: 'header',
@@ -243,44 +240,13 @@ function DashboardLayoutBasic(props) {
 
 
 
-  // useEffect(() => {
-  //   document.addEventListener('click', function (event) {
-  //     const clickedElement = event.target;
-  //     console.log('The clicked element is 1:', clickedElement);
-  //     console.log('The clicked element is 1.name:', clickedElement.tagName);
-  //     var hrefdd = document.querySelector('a').getAttribute('href');
-  //     console.log("link is0", hrefdd)
-  //     var hreff = clickedElement.getAttribute('href');
-  //     console.log("link is1", hreff)
-
-  //     if (hreff == "/integrations") {
-  //       window.location.href = '/integrations'
-  //     }
-  //     if (hreff == "/orders") {
-  //       window.location.href = '/SignIn1'
-  //     }
-  //     if (hreff == "/well") {
-  //       window.location.href = '/well'
-  //     }
-
-  //     console.log('The clicked element is 2:', event);
-  //     // You can then access properties of clickedElement, e.g., clickedElement.id, clickedElement.tagName
-  //   });
-
-
-
-  //   var href = document.querySelector('a').getAttribute('href');
-
-  //   console.log("link is 2", href);
-
-
-  // }, [1]);
+  
   return (
     // Remove this provider when copying and pasting into your project.
     <>
       <Toaster position="top-left" reverseOrder={true}
       />
-      <AppProvider
+      <ReactRouterAppProvider
         close={"true"}
         navigation={NAVIGATION}
         router={router}
@@ -296,6 +262,7 @@ function DashboardLayoutBasic(props) {
             <>
               <div>
 
+                <Outlet />
                 {/*               
              
              <Sheet color="primary" variant="soft" >
@@ -304,23 +271,12 @@ function DashboardLayoutBasic(props) {
 
               </div>
 
-              <Gridss />
-              {/* <Routes>
-                <Route element={<Well />}>
-                  <Route path=":Dashboard/well" element={<Well />} />
-                  <Route path="GetGrid1" element={<GetGrid1 />} />
-                </Route>
-                <Route index element={<Well />} />
-                <Route exact path="/dash/getgrid" element={<GetGrid1 />} />
-                <Route exact path="/SignIn1" element={<F2 />} />
-                <Route exact path="/integrations" element={<GetGrid1 />} />
-                <Route exact path="/Dash/well" element={<Well />} />
-                <Route exact path="/DrawerF" element={<DrawerF />} />
-              </Routes> */}
+              {/* <Gridss /> */}
+
             </>
           </PageContainer>
         </DashboardLayout>
-      </AppProvider>
+      </ReactRouterAppProvider>
     </>
 
   );
@@ -391,6 +347,8 @@ const Gridss = () => {
   const [DelBtn, setDelBtn] = useState(false)
   const [EditBtn, setEditBtn] = useState(false)
   const [RowSelectedD, SetRowSelected] = useState({})
+  const [RowSelect, SetRowSelect] = useState({})
+
 
 
 
@@ -449,7 +407,37 @@ const Gridss = () => {
     );
   };
   const handleEdit = (row) => {
-    setOpen(true)
+
+    console.log("edit RowSelectedD", RowSelectedD)
+    console.log("RowSelect", RowSelect)
+
+    var _rowSel = RowSelectedD;
+    console.log("_rowSel", _rowSel)
+    if (_rowSel == undefined || _rowSel == null) {
+
+      toast.dismiss("سطری برای حذف شدن انتخاب نشده است")
+      toast.error("سطری برای حذف شدن انتخاب نشده است")
+
+    }
+    console.log("Basemodels", Basemodels)
+    console.log("type", parseInt(Basemodels))
+    if (_rowSel != undefined || _rowSel != null) {
+      if (parseInt(Basemodels) == 1) {
+        setOpenWell(true)
+      }
+      if (parseInt(Basemodels) == 2) {
+        setFieldName(_rowSel['FIELD_name'])
+        setFielLath(_rowSel['Y_COORDINATE'])
+        setFieldLong(_rowSel['X_COORDINATE'])
+        SetFieldType(_rowSel['FIELD_TYPE_Name'])
+        setFeild_IS_Active(_rowSel['IS_ACTIVE'])
+        setABRVField(_rowSel['FIELD_ABBREVATION'])
+
+
+        //setFieldName = 
+        setOpenFeild(true)
+      }
+    }
     // alert(`Edit clicked for ${row.name}`);
     // You can open a modal or form here
   };
@@ -492,22 +480,13 @@ const Gridss = () => {
 
   ]);
 
-  const chRowselected = (e) => {
 
-    const getrow = e.electedNodes;
-    console.log("click", e.selectedNodes[0].data)
-    
-    toast.dismiss("سطری برای حذف شدن انتخاب نشده است")
-    if (e.data == undefined) {
-      toast.error("سطری برای حذف شدن انتخاب نشده است" )
-    }
 
-  }
   const Rowselected = (e) => {
 
-    console.log("click", e)
+    // console.log("click", e)
     const getrow = e.data;
-    SetRowSelected(getrow);
+    //SetRowSelected(e.data);
     console.log("getrow", getrow)
     console.log("getrow", getrow['FIELD_id'])
     if (getrow['FIELD_id'] !== undefined || getrow['FIELD_id'] !== null) {
@@ -515,7 +494,13 @@ const Gridss = () => {
       setEditBtn(true);
     }
 
+  }
+  const chRowselected = (e) => {
 
+
+    console.log("click", e.selectedNodes[0].data)
+    SetRowSelected(e.selectedNodes[0].data);
+    console.log("SetRowSelected", RowSelectedD)
 
 
   }
@@ -620,6 +605,12 @@ const Gridss = () => {
 
     ChechMaster(Basemodels)
   }, [Basemodels]);
+
+  useEffect(() => {
+    console.log('654', RowSelectedD)
+    SetRowSelect(RowSelectedD)
+
+  }, [1]);
 
   function Operat_btn() {
 
@@ -758,14 +749,14 @@ const Gridss = () => {
         { field: "FIELD_TYPE_Name" },
         { field: "X_COORDINATE" },
         { field: "Y_COORDINATE" },
-        {
+        
+        { field: "IS_ACTIVE" },
+        { field: "SOURCE_NAME" },
+{
           headerName: "Actions",
           field: "button",
           cellRenderer: bb,
         },
-        { field: "IS_ACTIVE" },
-        { field: "SOURCE_NAME" },
-
       ])
       fetch("http://localhost:8000/osdu/api/getfield")
         .then((resp) => resp.json())

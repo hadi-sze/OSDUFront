@@ -3,14 +3,12 @@ import { Button, FormLabel, Stack, Typography } from '@mui/joy';
 import { themeQuartz } from 'ag-grid-community';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import {
-  RowSelectionOptions,
-  ClientSideRowModelModule, NumberEditorModule, extEditorModule, alidationModule,
-} from "ag-grid-community";
+import InfoIcon from '@mui/icons-material/Info';
 import { useState, useCallback } from 'react';
 import { CssVarsProvider } from '@mui/joy/styles';
-import { Box } from '@mui/material';
-import FormGroup from '@mui/material';
+
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 import { Transition } from 'react-transition-group';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ModeEditTwoToneIcon from '@mui/icons-material/ModeEditTwoTone';
@@ -23,11 +21,66 @@ import FormHelperText from '@mui/joy/FormHelperText';
 import Textarea from '@mui/joy/Textarea';
 import Checkbox from '@mui/joy/Checkbox';
 import { IconButton } from '@mui/joy';
+import Divider from '@mui/joy/Divider';
+import DatePicker from "react-multi-date-picker"
+import Sheet from '@mui/joy/Sheet';
+import axios from 'axios';
+import dayjs from 'dayjs';
+import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker as ds } from '@mui/x-date-pickers/DatePicker';
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import { useEffect } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
+import { Icon } from '@mui/material';
+var API_ADDRESS = "http://127.0.0.1:8000/";
 const FieldModels = () => {
 
   const [rowDatatest, setRowDatatest] = useState();
   const [RowSelectedD, SetRowSelected] = useState({})
   const [FieldTypeName, SetFieldTypeName] = useState('')
+
+  const [Abbreviation, Setabbreviation] = useState('')
+  const [ColorCode, SetColorCode] = useState('')
+  const [Expiration, SetExpiration] = useState(new Date())
+  const [EFFECTIVE_DATE, SetEFFECTIVE_DATE] = useState(new Date())
+  const [IS_ACTIVE, SetIsActive] = useState(true)
+  const [DeleteID, SetDeleteID] = useState()
+
+  var DelID = 0;
+  const Create = () => {
+    var APINAME = "osdu/api/AddFIELDTYPE"
+
+    axios.post(API_ADDRESS + APINAME, {
+      FieldTypeName: FieldTypeName,
+      EFFECTIVE_DATE: EFFECTIVE_DATE,
+      Expiration: Expiration,
+      ABRVField: Abbreviation,
+      ColorCode: ColorCode,
+      IS_ACTIVE: IS_ACTIVE,
+      currentuseer: 'Admin',
+    })
+      .then(function (response) {
+        // console.log(response);
+        // alert(response.status)
+        if (response.status === 200) {
+
+          setOpen(false)
+          toast.success('اطلاعات ذخیره شد')
+        } else {
+
+          toast.error("اطلاعات اشتباه است")
+        }
+      })
+      .catch(function (error) {
+
+        console.log(error);
+        toast.success(" اطلاعات درج شد.")
+        setOpen(false)
+      })
+
+  }
 
   const gridOptions = {
 
@@ -98,9 +151,53 @@ const FieldModels = () => {
     setOpen(true)
 
   }
+  useEffect(() => {
+    console.log(DeleteID)
 
+ 
+    console.log("DeleteID", DeleteID);
+  }, [])
+
+
+  useEffect(() => {
+    console.log(DeleteID);
+    SetDeleteID(DeleteID) // returns 0;
+  }, );
   const handleDelete = () => {
+    var APINAME = "osdu/api/DeleteFieldType"
+    console.log("DeleteID", DeleteID)
 
+    console.log("delId", DelID);
+    if (DeleteID != null) {
+
+      axios.delete(API_ADDRESS + APINAME, {
+        headers: {
+          Authorization: true
+        },
+        data: {
+          R_FIELD_TYPE_ID: DeleteID,
+        }
+
+      }).then(function (response) {
+        // console.log(response);
+        // alert(response.status)
+        if (response.status === 200) {
+          toast.success('رکورد حذف شد')
+        } else {
+
+          toast.error("اطلاعات اشتباه است")
+        }
+      })
+        .catch(function (error) {
+
+          console.log(error);
+          toast.error("  ارتباط با سرور قطع شده است")
+        })
+    }
+    if (DeleteID == undefined || DeleteID == null) {
+      toast.error("please select on row !!")
+
+    }
   }
   const [rowData, setRowData] = useState([
     { نام: "اروند", کد: "ar_30", شماره: 64950, فعال: true, makee: "Tesla", مختصات: 330.20, عمق: 64950, },
@@ -112,12 +209,12 @@ const FieldModels = () => {
     { field: "R_FIELD_TYPE_ID", headerName: "id", sortable: true, filter: true },
     { field: "DISPLAY_NAME" },
     { field: "LONG_NAME" },
-    { field: "AVVRIVATION", headerName: "اختصار", sortable: true, filter: true },
-    { field: "COLOR_CODE", headerName: "کد رنگ", sortable: true, filter: true },
-    { field: "EFFECTIVE_DATE" },
-    { field: "EXPIRED_DATE" },
-    { field: "FILED_TYPE_NAME" },
-    { field: "IS_ACTIVE", headerName: "وضعیت", sortable: true, filter: true },
+    { field: "AVVRIVATION", headerName: "AVVRIVATION", sortable: true, filter: true },
+    { field: "COLOR_CODE", headerName: "COLOR CODE", sortable: true, filter: true },
+    { field: "EFFECTIVE_DATE", headerName: "EFFECTIVE DATE" },
+    { field: "EXPIRED_DATE", headerName: "EXPIRED DATE" },
+    { field: "FILED_TYPE_NAME", headerName: "COLOR CODE" },
+    { field: "IS_ACTIVE", headerName: "is Acive ", sortable: true, filter: true },
     {
       headerName: "Actions",
       field: "button",
@@ -138,8 +235,17 @@ const FieldModels = () => {
 
 
     console.log("click", e.selectedNodes[0].data)
-    SetRowSelected(e.selectedNodes[0].data);
-    console.log("SetRowSelected", RowSelectedD)
+    // SetRowSelected(e.selectedNodes[0].data);
+    // console.log("SetRowSelected", RowSelectedD)
+    const id = e.selectedNodes[0].data['R_FIELD_TYPE_ID']
+    SetDeleteID(id+1)
+    console.log("deleee,",DeleteID)
+    SetFieldTypeName(e.selectedNodes[0].data['FILED_TYPE_NAME'])
+    Setabbreviation(e.selectedNodes[0].data['AVVRIVATION'])
+    SetColorCode(e.selectedNodes[0].data['COLOR_CODE'])
+    SetEFFECTIVE_DATE(e.selectedNodes[0].data['EFFECTIVE_DATE'])
+    SetExpiration(e.selectedNodes[0].data['EXPIRED_DATE'])
+    SetIsActive(e.selectedNodes[0].data['IS_ACTIVE'])
 
 
   }
@@ -164,29 +270,52 @@ const FieldModels = () => {
 
 
 
-  React.useEffect(() => {
+  useEffect(() => {
     onGridReady()
   }, [])
   return (
     <>
-
+      <Toaster position="top-left" reverseOrder={true} />
       <CssVarsProvider>
+
+
         <Stack spacing={3} alignItems={"flex-start"}>
-          <Typography color="neutral" level='h3'> اطلاعات پایه برای مخزن</Typography>
+          <Sheet
 
-          <Button onClick={() => setOpen(true)}>ایجاد</Button>
+            spacing={2}
+            component="li"
+            variant="outlined"
+            sx={{ borderRadius: 'sm', p: 2, listStyle: 'none', width: "100%", boxShadow: "3" }}
+          >
+            <Sheet
+              spacing={2}
+              component="li"
+              variant="soft"
+              color="success"
 
-          <div style={{ height: 300, width: "100%" }}>
-            <AgGridReact
-              rowData={rowData}
-              columnDefs={colDefs}
-              gridOptions={gridOptions}
-              onRowselected={chRowselected}
+              sx={{ borderRadius: 'sm', p: 2, listStyle: 'none', width: "100%" }}
+            >
 
-              theme={myTheme}
-            />
-          </div>
 
+              <Typography startDecorator={<InfoIcon />} sx={{ mb: 2 }} > REFERENCE FIELD TYPE:
+                <Typography color="success" > A reference table identifying the type of field. For example regulatory or locally assigned. </Typography>
+              </Typography>
+            </Sheet>
+            <br></br>
+            <Button onClick={() => setOpen(true)}>New Feild</Button>
+
+            <div style={{ height: 300, width: "100%" }}>
+              <AgGridReact
+                rowData={rowData}
+                columnDefs={colDefs}
+                gridOptions={gridOptions}
+
+
+                onSelectionChanged={chRowselected}
+                theme={myTheme}
+              />
+            </div>
+          </Sheet>
         </Stack>
 
         <React.Fragment>
@@ -227,75 +356,108 @@ const FieldModels = () => {
                     }[state],
                   }}
                 >
-                  <DialogTitle>نوع مخزن</DialogTitle>
+                  <DialogTitle> FIELDTYPE</DialogTitle>
                   <DialogContent>
-                    در لیست زیر اطلاعات مربرط به داد های پایه را درج نمایید
+                    Insert Deatils Information for Filed Type
                   </DialogContent>
 
 
                   <Typography level="title-md" sx={{ fontWeight: 'bold', mt: 1 }}>
-                    اطلاعات مخزن
+                    Field Type :
                   </Typography>
                   <FormControl>
-                    <FormLabel>نوع</FormLabel>
-                    <Textarea
+                    <FormLabel>FIELD TYPE</FormLabel>
+                    <Textarea value={FieldTypeName}
                       onChange={(e) => {
                         SetFieldTypeName(e.target.value);
                       }}
-                      placeholder='عنوان نوع مخزن را وارد کنید' ></Textarea>
+                      placeholder='Please set FIELD TYPE ' ></Textarea>
 
-                    <FormHelperText>عنوان نوع مخزن را وارد کنید'</FormHelperText>
+                    <FormHelperText> Please set FIELD TYPE</FormHelperText>
 
                   </FormControl>
                   <FormControl>
-                    <FormLabel> کد رنگ</FormLabel>
-                    <Textarea
+                    <FormLabel> Color Code</FormLabel>
+                    <Textarea value={ColorCode}
                       onChange={(e) => {
-                        SetFieldTypeName(e.target.value);
+                        SetColorCode(e.target.value);
                       }}
-                      placeholder='عنوان نوع مخزن را وارد کنید' ></Textarea>
+                      placeholder='Please insert Color Code'></Textarea>
 
-                    <FormHelperText>عنوان نوع مخزن را وارد کنید'</FormHelperText>
+                    <FormHelperText> The color code is used to label the color</FormHelperText>
 
                   </FormControl>
                   <FormControl>
-                    <FormLabel>  اختصار</FormLabel>
-                    <Textarea
-                      onChange={(e) => {
-                        SetFieldTypeName(e.target.value);
-                      }}
-                      placeholder=' نام اختصاری' ></Textarea>
+                    <FormControl>
+                      <FormLabel> ABBREVIATION </FormLabel>
+                      <Textarea
+                        value={Abbreviation}
+                        onChange={(e) => {
+                          Setabbreviation(e.target.value);
+                        }}
+                        placeholder='please insert ABBREVIATION ' ></Textarea>
 
-                    <FormHelperText> نام اخنصاری را ا وارد کنید</FormHelperText>
+                      <FormHelperText> Abbreviation used for reference type or code </FormHelperText>
 
+                    </FormControl>
+                    <FormControl>
+                      <FormLabel>EFFECTIVE_DATE </FormLabel>
+
+                      <DatePicker
+                        value={EFFECTIVE_DATE}
+                        format="HH:mm:ss MM/DD/YYYY "
+                      ></DatePicker>
+                      <FormHelperText>The date that the data in this row first came into effect</FormHelperText>
+
+                    </FormControl>
+
+                    <FormControl>
+                      <FormLabel> EXPIRY DATE</FormLabel>
+                      <DatePicker
+                        format="HH:mm:ss MM/DD/YYYY "
+                      ></DatePicker>
+
+                      <FormHelperText> The date that no longer active or in inActive </FormHelperText>
+
+                    </FormControl>
                   </FormControl>
-
                   <FormControl>
-                         <FormLabel>تاریخ غیر فعال شدن</FormLabel>
 
-                    <FormHelperText>  را ا وارد کنید</FormHelperText>
-
-                  </FormControl>
-
-                  <FormControl>
-                       <FormControl>
-                         <FormLabel>تاریخ  فعال سازی</FormLabel>
-
-                    <FormHelperText>  را ا وارد کنید</FormHelperText>
-
-                  </FormControl>
-
-                  <FormControl></FormControl>
-                    <FormLabel>وضعیت</FormLabel>
+                    <FormControl></FormControl>
+                    <FormLabel>Active </FormLabel>
 
                     <Checkbox
                       color="success"
-                      label="فعال"
-
+                      label="Active"
+                      required
                       variant="soft"
                     />
 
                   </FormControl>
+
+
+
+
+                  <Divider sx={{ mt: 'auto' }} />
+                  {DeleteID}
+                  <Stack
+                    direction="row"
+                    useFlexGap
+                    spacing={1}
+                    sx={{ justifyContent: 'space-between' }}
+                  >
+                    <Button
+                      variant="outlined"
+                      color="neutral"
+                      onClick={() => {
+                        // setType('');
+                        // setAmenities([]);
+                      }}
+                    >
+                      Cleare
+                    </Button>
+                    <Button onClick={Create}>Save</Button>
+                  </Stack>
 
 
                 </ModalDialog>

@@ -122,9 +122,12 @@ const WellModels = () => {
 
       <CssVarsProvider>
         <Stack spacing={3} alignItems={"flex-start"}>
-          <Typography color="neutral" level='h3'> اطلاعات پایه برای چاه</Typography>
+          <Typography color="neutral" level='h4'> Base Model : 
+             <Typography color="rgba(97, 202, 70, 0.93)" level='h2' > Well </Typography>
+          </Typography>
+           
 
-          <Button>ایجاد</Button>
+          <Button>New</Button>
 
           <div style={{ height: 300, width :"100%" }}>
             <AgGridReact

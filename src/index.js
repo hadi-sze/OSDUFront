@@ -9,8 +9,9 @@ import App1 from './App1';
 import Layout from './layouts/dashboard';
 import DashboardPage from './Pages/index';
 import FeildModels from './Pages/BaseModels/FeildModels';
-import { Typography } from '@mui/material'; 
+import { Typography } from '@mui/material';
 import WellModels from './Pages/BaseModels/WellModels';
+import Basemodel from './Pages/BaseModels/Basemodel';
 
 const router = createBrowserRouter([
   {
@@ -34,18 +35,39 @@ const router = createBrowserRouter([
           },
 
           {
-            
+
             path: '/baseModels/Field',
             Component: FeildModels,
           },
           {
             path: '/baseModels/Well',
             Component: WellModels,
-          },   
-          
+          },
+          {
+            path: '/baseModels/BaseModels',
+            Component: Basemodel,
+          }
+          ,
+          {
+            path: '/baseModels/Field/R_FEILD_TYPE',
+            Component: FeildModels,
+          }, {
+            path: '/baseModels/General',
+            Component: FeildModels,
+          },
+          {
+            path: '/baseModels/Other',
+            Component: FeildModels,
+          },
 
 
-           
+
+
+
+
+
+
+
 
 
 
